@@ -50,6 +50,7 @@ const {
 } = useMyFetch('project/create', {
   immediate: false
 }).post(form)
+
 const remove = async (id: string) => {
   const loading = ElLoading.service({
     fullscreen: true,

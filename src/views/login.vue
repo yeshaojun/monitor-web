@@ -59,7 +59,8 @@ function login() {
     if (valid) {
       await execute()
       if (data.value) {
-        useLocalStorage('token', JSON.parse(data.value as string)?.token)
+        // useLocalStorage('token', JSON.parse(data.value as string)?.token)
+        localStorage.setItem('token', JSON.parse(data.value as string)?.token)
         ElMessage.success('登录成功')
         router.push('/')
       }
