@@ -10,14 +10,18 @@ const useMyFetch = createFetch({
       return ctx
     },
     onFetchError(ctx) {
-      console.log('ctx', ctx)
       if (JSON.parse(ctx.data).errorCode === 10006) {
         window.location.href = '/login'
         localStorage.clear()
         return ctx
       }
-      ElMessage.error(JSON.parse(ctx.data).msg)
-      return ctx
+      const msg = JSON.parse(ctx.data).msg
+      if (typeof msg === 'string') {
+        ElMessage.error(JSON.parse(ctx.data).msg)
+      } else {
+        ElMessage.error(JSON.parse(ctx.data).msg.join(','))
+      }
+      return Promise.reject(msg)
     }
   },
   fetchOptions: {

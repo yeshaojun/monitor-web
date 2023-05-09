@@ -108,7 +108,7 @@ const { isFetching, data, execute } = useMyFetch('user/login', {
 })
 
 const formInstace = ref<FormInstance>()
-function login() {
+async function login() {
   formInstace.value?.validate(async (valid) => {
     if (valid) {
       if (status.value === 'login') {
@@ -120,24 +120,21 @@ function login() {
           router.push('/')
         }
       } else {
-        useMyFetch('user/register')
-          .post({
-            email: user.email,
-            password: user.password,
-            nickname: user.nickname,
-            password1: user.password,
-            password2: user.password1
-          })
-          .then(() => {
-            ElMessage.success('注册成功！')
-            status.value = 'login'
-          })
+        const { error } = await useMyFetch('user/register').post({
+          email: user.email,
+          password: user.password,
+          nickname: user.nickname,
+          password1: user.password,
+          password2: user.password1
+        })
+        if (!error) {
+          ElMessage.success('注册成功！')
+          status.value = 'login'
+        }
       }
     }
   })
 }
-
-function register() {}
 </script>
 <style lang="scss">
 .login-wrapper {
