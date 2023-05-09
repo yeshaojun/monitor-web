@@ -6,14 +6,14 @@ const route = useRoute()
 <template>
   <div class="" v-if="route.path !== '/login'">
     <el-container class="h-screen">
-      <el-header class="bg-gray-800 flex items-center">
-        <div class="text-white">前端监控系统</div>
+      <el-header class="flex items-center" style="background-color: #20293a">
+        <div class="text-white text-4xl" sty>MONITOR SYSTEM</div>
       </el-header>
       <el-container>
         <el-aside width="200px">
           <el-menu
-            active-text-color="#ffd04b"
-            background-color="#545c64"
+            active-text-color="#c957e8"
+            background-color="#354154"
             class="h-full"
             default-active="/project"
             router

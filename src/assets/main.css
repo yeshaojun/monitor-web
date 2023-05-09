@@ -1,1 +1,5 @@
 @import './base.css';
+
+.font-primary {
+    color: #3467e2;
+}

@@ -1,5 +1,5 @@
 <template>
-  <el-table :data="dataInfo.list" style="width: 100%" v-loading="loading">
+  <el-table :data="dataInfo.list" style="width: 100%" v-loading="loading" empty-text="暂无报错信息">
     <el-table-column type="index" width="60" label="序号"></el-table-column>
     <el-table-column prop="message" label="报错信息" width="300"> </el-table-column>
     <el-table-column prop="pageUrl" label="报错页面"> </el-table-column>
@@ -99,7 +99,7 @@ const route = useRoute()
 const dialogVisible = ref(false)
 const dialogTitle = ref('')
 const revert = ref<HTMLDivElement>()
-const activities = ref([])
+const activities = ref<any[]>([])
 const dataInfo = reactive({
   current: 1,
   pageSize: 10,
@@ -155,12 +155,11 @@ const playRecord = (recordScreenId: string) => {
       const result = JSON.parse(res.data.value)
       dialogVisible.value = true
       dialogTitle.value = '播放录屏'
-      console.log('121', result.events)
       let events = unzip(result.events.toString())
       nextTick(() => {
         new rrwebPlayer(
           {
-            target: document.getElementById('revert'),
+            target: document.getElementById('revert') as HTMLElement,
             data: {
               events
             }
