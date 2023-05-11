@@ -95,6 +95,7 @@ import rrwebPlayer from 'rrweb-player'
 import 'rrweb-player/dist/style.css'
 import dayjs from 'dayjs'
 import { findCodeBySourceMap } from '@/utils/sourcemap'
+import { ElLoading, ElMessage } from 'element-plus'
 const route = useRoute()
 const dialogVisible = ref(false)
 const dialogTitle = ref('')
@@ -148,28 +149,31 @@ const revertBehavior = ({ breadcrumb }: { breadcrumb: any }) => {
   activities.value = breadcrumb
 }
 
-const playRecord = (recordScreenId: string) => {
-  useMyFetch('monitor/screen?screenId=' + recordScreenId)
-    .get()
-    .then((res: any) => {
-      const result = JSON.parse(res.data.value)
-      dialogVisible.value = true
-      dialogTitle.value = '播放录屏'
-      let events = unzip(result.events.toString())
-      nextTick(() => {
-        new rrwebPlayer(
-          {
-            target: document.getElementById('revert') as HTMLElement,
-            data: {
-              events
-            }
-          },
-          {
-            UNSAFE_replayCanvas: true
-          }
-        )
-      })
-    })
+const playRecord = async (recordScreenId: string) => {
+  loading.value = true
+  const { error, data } = await useMyFetch('monitor/screen?screenId=' + recordScreenId).get()
+  loading.value = false
+  if (error.value) {
+    ElMessage.error(error.value)
+    return
+  }
+  const result = JSON.parse(data.value as string)
+  dialogVisible.value = true
+  dialogTitle.value = '播放录屏'
+  let events = unzip(result.events.toString())
+  nextTick(() => {
+    new rrwebPlayer(
+      {
+        target: document.getElementById('revert') as HTMLElement,
+        data: {
+          events
+        }
+      },
+      {
+        UNSAFE_replayCanvas: true
+      }
+    )
+  })
 }
 
 function format(time: number) {

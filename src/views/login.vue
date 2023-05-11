@@ -91,6 +91,7 @@ import { ElMessage } from 'element-plus'
 import { useMyFetch } from '@/utils/http'
 import { useRouter } from 'vue-router'
 const router = useRouter()
+const isFetching = ref(false)
 const user = reactive({
   email: '',
   password: '',
@@ -100,25 +101,23 @@ const user = reactive({
 
 const status = ref('login')
 
-const { isFetching, data, execute } = useMyFetch('user/login', {
-  immediate: false
-}).post({
-  email: user.email,
-  password: user.password
-})
-
 const formInstace = ref<FormInstance>()
 async function login() {
   formInstace.value?.validate(async (valid) => {
     if (valid) {
       if (status.value === 'login') {
-        await execute()
+        isFetching.value = true
+        const { data } = await useMyFetch('user/login').post({
+          email: user.email,
+          password: user.password
+        })
+        isFetching.value = false
         if (data.value) {
-          // useLocalStorage('token', JSON.parse(data.value as string)?.token)
           localStorage.setItem('token', JSON.parse(data.value as string)?.token)
           ElMessage.success('登录成功')
           router.push('/')
         }
+        // useLocalStorage('token', JSON.parse(data.value as string)?.token)
       } else {
         const { error } = await useMyFetch('user/register').post({
           email: user.email,
