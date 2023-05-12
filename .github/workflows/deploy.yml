@@ -6,7 +6,7 @@ jobs:
     steps:
       - uses: appleboy/ssh-action@v0.1.10
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
+          host: 119.45.209.87
+          username: ubuntu
           password: ${{ secrets.SSH_PDW }}
           script: whoami
