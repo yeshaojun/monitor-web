@@ -4,15 +4,16 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: appleboy/ssh-action@v0.1.10
+      - uses: appleboy/ssh-action@v0.1.7
         with:
-          host: 119.45.209.87
-          username: ubuntu
-          password: QQ5056love
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PDW }}
           script_stop: true
           script: |
             cd /data
             ls
+            sudo -s
             rm -rf monitor-web
             git clone git@github.com:yeshaojun/monitor-web.git -b ${{github.ref_name}}
             cd minitor-web
