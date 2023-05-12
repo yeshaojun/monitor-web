@@ -4,18 +4,9 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: appleboy/ssh-action@v0.1.7
+      - uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PDW }}
-          script_stop: true
-          script: |
-            cd /data
-            ls
-            sudo -s
-            rm -rf monitor-web
-            git clone git@github.com:yeshaojun/monitor-web.git -b ${{github.ref_name}}
-            cd minitor-web
-            npm install
-            npm run build
+          script: whoami
