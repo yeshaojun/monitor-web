@@ -4,4 +4,4 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest
     steps:
-      - run: echo ${{ screts.SSH_HOST }}
+      - run: echo ${{ secrets.SSH_HOST }}
