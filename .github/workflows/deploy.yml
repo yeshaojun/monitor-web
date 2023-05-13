@@ -16,5 +16,5 @@ jobs:
             sudo rm -rf monitor-web
             sudo git clone git@github.com:yeshaojun/monitor-web.git -b ${{github.ref_name}}
             cd monitor-web
-            sudo npm install
-            sudo npm run build
+            sudo yarn
+            sudo yarn build
