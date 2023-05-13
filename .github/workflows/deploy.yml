@@ -4,4 +4,10 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest
     steps:
-      - run: echo 'Hi ${{ secrets.SSH_PDW }}'
+      - uses: appleboy/ssh-action@v0.1.10
+        env:
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PWD }}
+          script: whoami
