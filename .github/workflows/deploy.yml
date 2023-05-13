@@ -4,9 +4,4 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: appleboy/ssh-action@v0.1.10
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          password: ${{ secrets.SSH_PDW }}
-          script: whoami
+       - run: echo 'Hi ${{ env.secrets }}'  # Hi Mona
