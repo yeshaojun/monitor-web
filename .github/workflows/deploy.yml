@@ -9,4 +9,10 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PWD }}
-          script: whoami
+          script: |
+            cd /data
+            sudo rm -rf monitor-web
+            git clone git@github.com:yeshaojun/monitor-web.git
+            cd monitor-web
+            npm install
+            npm run build
