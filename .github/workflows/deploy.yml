@@ -4,4 +4,4 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest
     steps:
-       - run: echo 'Hi ${{ env.SSH_USER }}'  # Hi Mona
+       - run: echo 'Hi ${{ secrets.SSH_USER }}'  # Hi Mona
