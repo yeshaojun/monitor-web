@@ -12,4 +12,4 @@ jobs:
           script_stop: true
           script: |
             cd /data/monitor-web
-            git pull
+            sudo git pull
