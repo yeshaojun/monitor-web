@@ -11,9 +11,10 @@ jobs:
           password: ${{ secrets.SSH_PWD }}
           script_stop: true
           script: |
+            sudo -s
             cd /data
-            sudo rm -rf monitor-web
-            sudo git clone git@github.com:yeshaojun/monitor-web.git -b ${{github.ref_name}}
+            rm -rf monitor-web
+            git clone git@github.com:yeshaojun/monitor-web.git -b ${{github.ref_name}}
             cd monitor-web
             npm install
             npm run build
