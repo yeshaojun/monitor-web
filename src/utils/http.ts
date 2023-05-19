@@ -1,7 +1,8 @@
 import { createFetch } from '@vueuse/core'
 import { ElMessage } from 'element-plus'
 
-const base = 'http://api.yeshaojun.com/v1/' //'http://localhost:9000/v1/'
+const base = 'http://api.yeshaojun.com/v1/'
+// const base = 'http://localhost:9500/v1/'
 const useMyFetch = createFetch({
   baseUrl: base,
   options: {

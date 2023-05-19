@@ -2,12 +2,20 @@
 import { Document, Menu as IconMenu, Location, Setting } from '@element-plus/icons-vue'
 import { RouterView, useRoute } from 'vue-router'
 const route = useRoute()
+const localStorage = window.localStorage
 </script>
 <template>
   <div class="" v-if="route.path !== '/login'">
     <el-container class="h-screen">
-      <el-header class="flex items-center" style="background-color: #20293a">
+      <el-header class="flex items-center justify-between" style="background-color: #20293a">
         <div class="text-white text-4xl" sty>MONITOR SYSTEM</div>
+        <div class="text-white text-1xl">
+          {{
+            localStorage.getItem('userInfo')
+              ? JSON.parse(localStorage.getItem('userInfo') as string).nickname
+              : ''
+          }}
+        </div>
       </el-header>
       <el-container>
         <el-aside width="200px">

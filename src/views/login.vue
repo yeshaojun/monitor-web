@@ -115,6 +115,8 @@ async function login() {
         if (data.value) {
           localStorage.setItem('token', JSON.parse(data.value as string)?.token)
           ElMessage.success('登录成功')
+          const result = await useMyFetch('user/info').get().json()
+          localStorage.setItem('userInfo', JSON.stringify(result.data.value))
           router.push('/')
         }
         // useLocalStorage('token', JSON.parse(data.value as string)?.token)
@@ -126,7 +128,8 @@ async function login() {
           password1: user.password,
           password2: user.password1
         })
-        if (!error) {
+        console.log('error', error)
+        if (!error.value) {
           ElMessage.success('注册成功！')
           status.value = 'login'
         }
