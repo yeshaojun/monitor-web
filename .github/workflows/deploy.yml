@@ -1,0 +1,19 @@
+name: Deploy publish-deploy
+on: [push]
+jobs: 
+  Deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: appleboy/ssh-action@v0.1.10
+        width:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PDW }}
+          script: whoami
+          script: |
+            cd /data
+            rm -rf monitor-web
+            git clone https://github.com/yeshaojun/monitor-web.git
+            cd minitor-web
+            npm install
+            npm run build
