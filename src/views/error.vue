@@ -20,7 +20,7 @@
         <span>{{ scope.row.deviceInfo.os }}</span>
       </template>
     </el-table-column>
-    <el-table-column fixed="right" label="还原错误代码" width="100">
+    <el-table-column fixed="right" label="代码还原" width="100">
       <template #default="scope">
         <el-button
           v-if="scope.row.type == 'error' || scope.row.type == 'unhandledrejection'"
@@ -50,6 +50,17 @@
           type="primary"
           @click="revertBehavior(scope.row)"
           >查看用户行为</el-button
+        >
+      </template>
+    </el-table-column>
+    <el-table-column fixed="right" label="操作" width="80">
+      <template #default="scope">
+        <el-button
+          size="small"
+          v-if="scope.row.breadcrumb"
+          type="primary"
+          @click="deleteLog(scope.row)"
+          >删除日志</el-button
         >
       </template>
     </el-table-column>
