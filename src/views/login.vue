@@ -83,6 +83,9 @@
       </div>
     </div>
   </div>
+  <!-- <div>
+    <a href="https://beian.miit.gov.cn/">浙ICP备17003801号</a>
+  </div> -->
 </template>
 <script setup lang="ts">
 import { reactive, ref } from 'vue'

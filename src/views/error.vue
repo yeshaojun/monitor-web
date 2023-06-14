@@ -1,7 +1,13 @@
 <template>
   <el-table :data="dataInfo.list" style="width: 100%" v-loading="loading" empty-text="暂无报错信息">
     <el-table-column type="index" width="60" label="序号"></el-table-column>
-    <el-table-column prop="message" label="报错信息" width="300"> </el-table-column>
+    <el-table-column label="报错信息" width="400">
+      <template #default="scope">
+        <div class="overflow-container">
+          {{ scope.row.message }}
+        </div>
+      </template>
+    </el-table-column>
     <el-table-column prop="pageUrl" label="报错页面"> </el-table-column>
     <el-table-column label="报错时间" width="150">
       <template #default="scope">
@@ -50,17 +56,6 @@
           type="primary"
           @click="revertBehavior(scope.row)"
           >查看用户行为</el-button
-        >
-      </template>
-    </el-table-column>
-    <el-table-column fixed="right" label="操作" width="80">
-      <template #default="scope">
-        <el-button
-          size="small"
-          v-if="scope.row.breadcrumb"
-          type="primary"
-          @click="deleteLog(scope.row)"
-          >删除日志</el-button
         >
       </template>
     </el-table-column>
@@ -204,4 +199,14 @@ function revertCode(obj: any) {
   })
 }
 </script>
-<style lang="scss"></style>
+<style lang="scss">
+.overflow-container {
+  display: -webkit-box;
+  overflow: hidden;
+  white-space: normal !important;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
+</style>
