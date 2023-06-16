@@ -22,14 +22,14 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },
+  server: {
+    proxy: {
+      '/v1': {
+        target: 'https://api.yeshaojun.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/v1/, 'v1')
+      }
+    }
   }
-  // server: {
-  //   proxy: {
-  //     '/v1': {
-  //       target: 'http://jsonplaceholder.typicode.com',
-  //       changeOrigin: true,
-  //       rewrite: (path) => path.replace(/^\/v1/, 'v1')
-  //     }
-  //   }
-  // }
 })

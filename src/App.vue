@@ -5,17 +5,26 @@ const route = useRoute()
 const localStorage = window.localStorage
 </script>
 <template>
-  <div class="" v-if="route.path !== '/login'">
+  <div v-if="route.path !== '/login'">
     <el-container class="h-screen">
       <el-header class="flex items-center justify-between" style="background-color: #20293a">
         <div class="text-white text-4xl" sty>MONITOR SYSTEM</div>
-        <div class="text-white text-1xl">
-          {{
-            localStorage.getItem('userInfo')
-              ? JSON.parse(localStorage.getItem('userInfo') as string).nickname
-              : ''
-          }}
-        </div>
+        <el-dropdown>
+          <div class="text-1xl">
+            <span class="text-white">
+              {{
+                localStorage.getItem('userInfo')
+                  ? JSON.parse(localStorage.getItem('userInfo') as string).nickname
+                  : ''
+              }}
+            </span>
+          </div>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item>通知设置</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
       </el-header>
       <el-container>
         <el-aside width="200px">

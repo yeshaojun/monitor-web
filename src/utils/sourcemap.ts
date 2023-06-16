@@ -11,19 +11,8 @@ function repalceAll(str: string) {
   return str.replace(new RegExp(' ', 'gm'), '&nbsp;')
 }
 
-// 获取文件路径
-function getFileLink(str: string) {
-  const reg = /vue-loader-options!\.(.*)\?/
-  const res = str.match(reg)
-  console.log(res)
-  if (res && Array.isArray(res)) {
-    return res[1]
-  }
-}
-
 function loadSourceMap(fileName: string, apikey: string) {
-  //   let file = matchStr(fileName)
-  let file = 'home'
+  let file = matchStr(fileName)
   if (!file) return
   return new Promise((resolve) => {
     useMyFetch(`monitor/map?filename=${file}&apikey=${apikey}`)
@@ -52,7 +41,12 @@ export const findCodeBySourceMap = async (
     line: Number(line),
     column: Number(column)
   })
-  let code = sourcesContent[sources.indexOf(result.source)]
+  const name = result.source.substring(result.source.indexOf('src'), result.source.lastIndexOf('.'))
+  const index = sources.findIndex((_: string) => _.indexOf(name) !== -1)
+  let code = ''
+  if (index !== -1) {
+    code = sourcesContent[index]
+  }
   codeList = code.split('\n')
   let row = result.line,
     len = codeList.length - 1

@@ -188,11 +188,19 @@ function format(time: number) {
 }
 
 function revertCode(obj: any) {
-  console.log('obj', obj)
+  // console.log('obj', obj)
+  const tip = ElMessage({
+    message: '文件解析需要一段时间，请稍侯....',
+    type: 'warning',
+    duration: 0
+  })
+  loading.value = true
   findCodeBySourceMap(obj, (res: string) => {
     // console.log('res')
     dialogVisible.value = true
+    tip.close()
     dialogTitle.value = '查看源码'
+    loading.value = false
     nextTick(() => {
       revert.value!.innerHTML = res
     })
@@ -208,5 +216,22 @@ function revertCode(obj: any) {
   word-wrap: break-word;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
+}
+
+.errdetail {
+  text-align: left;
+  width: 100%;
+  font-size: 16px;
+}
+
+.code-line {
+  padding: 5px 0;
+}
+.heightlight {
+  background-color: yellowgreen;
+}
+.errheader {
+  padding: 10px;
+  border-bottom: 1px solid rgb(214, 210, 210);
 }
 </style>

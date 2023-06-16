@@ -3,14 +3,16 @@ import { ElMessage } from 'element-plus'
 
 const base = 'https://api.yeshaojun.com/v1/'
 // const base = 'http://localhost:9500/v1/'
+// const base = '/v1'
 const useMyFetch = createFetch({
   baseUrl: base,
   options: {
     beforeFetch(ctx: any) {
-      ctx.options.headers.token = localStorage.getItem('token') as string
+      ctx.options.headers.token = (localStorage.getItem('token') as string) || ''
       return ctx
     },
     onFetchError(ctx) {
+      console.log('ctx', ctx)
       if (JSON.parse(ctx.data).errorCode === 10006) {
         window.location.href = '/login'
         localStorage.clear()
