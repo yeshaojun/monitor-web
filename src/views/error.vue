@@ -1,4 +1,18 @@
 <template>
+  <div>
+    <el-space>
+      <span> 用户Id </span>
+      <el-input v-model="dataInfo.name" placeholder="请输入用户信息"></el-input>
+      <el-date-picker
+        v-model="dataInfo.date"
+        type="daterange"
+        range-separator="To"
+        start-placeholder="开始时间"
+        end-placeholder="结束时间"
+      />
+      <el-button type="primary" @click="getList">查询</el-button>
+    </el-space>
+  </div>
   <el-table :data="dataInfo.list" style="width: 100%" v-loading="loading" empty-text="暂无报错信息">
     <el-table-column type="index" width="60" label="序号"></el-table-column>
     <el-table-column label="报错信息" width="400">
@@ -111,7 +125,9 @@ const dataInfo = reactive({
   current: 1,
   pageSize: 10,
   total: 1,
-  list: []
+  list: [],
+  name: '',
+  date: [dayjs().subtract(1, 'month'), dayjs()]
 })
 const loading = ref(false)
 
@@ -122,7 +138,9 @@ onMounted(() => {
 const getList = () => {
   loading.value = true
   useMyFetch(
-    `monitor/list?projectId=${route.query.id}&current=${dataInfo.current}&pageSize=${dataInfo.pageSize}`
+    `monitor/list?projectId=${route.query.id}&current=${dataInfo.current}&pageSize=${
+      dataInfo.pageSize
+    }&name=${dataInfo.name}&date=${dataInfo.date.map((_) => dayjs(_).format('YYYY-MM-DD'))}`
   )
     .get()
     .then((res: any) => {
