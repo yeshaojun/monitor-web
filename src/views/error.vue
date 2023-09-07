@@ -11,9 +11,17 @@
         end-placeholder="结束时间"
       />
       <el-button type="primary" @click="getList">查询</el-button>
+      <el-button type="danger" v-if="selectLen.length" @click="deleteMany">批量删除</el-button>
     </el-space>
   </div>
-  <el-table :data="dataInfo.list" style="width: 100%" v-loading="loading" empty-text="暂无报错信息">
+  <el-table
+    :data="dataInfo.list"
+    style="width: 100%"
+    v-loading="loading"
+    empty-text="暂无报错信息"
+    @selection-change="handleSelectionChange"
+  >
+    <el-table-column type="selection" width="55" />
     <el-table-column type="index" width="60" label="序号"></el-table-column>
     <el-table-column label="报错信息" width="400">
       <template #default="scope">
@@ -130,6 +138,7 @@ const dataInfo = reactive({
   date: [dayjs().subtract(1, 'month'), dayjs()]
 })
 const loading = ref(false)
+const selectLen = ref([])
 
 onMounted(() => {
   getList()
@@ -223,6 +232,21 @@ function revertCode(obj: any) {
       revert.value!.innerHTML = res
     })
   })
+}
+
+function handleSelectionChange(val: any) {
+  selectLen.value = val
+}
+
+function deleteMany() {
+  loading.value = true
+  useMyFetch(`monitor/delete?ids=${selectLen.value.map((_: any) => _._id)}`)
+    .delete()
+    .then((res: any) => {
+      ElMessage.success('删除成功！')
+      loading.value = false
+      getList()
+    })
 }
 </script>
 <style lang="scss">
