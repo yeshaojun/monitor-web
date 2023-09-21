@@ -244,6 +244,7 @@ function deleteMany() {
     .delete()
     .then((res: any) => {
       ElMessage.success('删除成功！')
+      selectLen.value = []
       loading.value = false
       getList()
     })

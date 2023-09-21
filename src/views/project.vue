@@ -23,6 +23,13 @@
           <el-button
             type="primary"
             size="small"
+            v-if="!scope.row.isCreated"
+            @click="logoutProject(scope.row._id)"
+            >退出项目</el-button
+          >
+          <el-button
+            type="primary"
+            size="small"
             v-if="scope.row.isCreated"
             @click="setMember(scope.row._id, scope.row.member)"
             >添加项目成员</el-button
@@ -33,7 +40,7 @@
             type="primary"
             size="small"
             @click="remove(scope.row._id)"
-            >移除</el-button
+            >移除项目</el-button
           >
         </el-space>
       </template>
@@ -153,5 +160,14 @@ function setMember(id: string, member: string[]) {
     }
   })
   addMemberInfo.users = arr
+}
+// 退出项目
+async function logoutProject(id: string) {
+  const { error } = await useMyFetch(`project/exit?id=${id}`).put()
+  console.log(error.value)
+  if (!error.value) {
+    ElMessage.success('操作成功！')
+    execute()
+  }
 }
 </script>
