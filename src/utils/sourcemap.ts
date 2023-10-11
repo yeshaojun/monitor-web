@@ -15,7 +15,7 @@ function loadSourceMap(fileName: string, apikey: string) {
   let file = matchStr(fileName)
   if (!file) return
   return new Promise((resolve) => {
-    useMyFetch(`monitor/map?fileName=${file}&apikey=${apikey}`)
+    useMyFetch(`monitor/map?filename=${file}&apikey=${apikey}`)
       .get()
       .then((res) => {
         resolve(JSON.parse(res.data.value as any))
