@@ -35,6 +35,20 @@ onMounted(() => {
   if (localStorage.getItem('userInfo')) {
     checkList.value = JSON.parse(localStorage.getItem('userInfo') as string).noticeAuth
   }
+
+  // @ts-ignore
+  dd &&
+    // @ts-ignore
+    dd.getAuthCode({
+      corpId: '',
+      success: (res: any) => {
+        console.log('res', res)
+        alert(res)
+      },
+      fail: (err: any) => {
+        alert('fail' + err)
+      }
+    })
 })
 </script>
 <template>
