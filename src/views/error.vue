@@ -202,6 +202,7 @@ const playRecord = async (recordScreenId: string) => {
           events
         }
       },
+      // @ts-ignore
       {
         UNSAFE_replayCanvas: true
       }
