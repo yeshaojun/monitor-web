@@ -114,7 +114,7 @@
   </el-dialog>
 </template>
 <script setup lang="ts">
-import { useMyFetch } from '@/utils/http'
+import { useRequest } from '@/utils/request'
 import { useRoute } from 'vue-router'
 import { reactive, ref, nextTick, onMounted } from 'vue'
 import { unzip } from '../utils/recordScreen'
@@ -146,19 +146,20 @@ onMounted(() => {
 
 const getList = () => {
   loading.value = true
-  useMyFetch(
-    `monitor/list?projectId=${route.query.id}&current=${dataInfo.current}&pageSize=${
-      dataInfo.pageSize
-    }&name=${dataInfo.name}&date=${dataInfo.date.map((_) => dayjs(_).format('YYYY-MM-DD'))}`
-  )
-    .get()
-    .then((res: any) => {
-      const result = JSON.parse(res.data.value)
-      dataInfo.total = result.total
-      dataInfo.list = result.data
-      console.log('dataInfo.list ', result)
-      loading.value = false
-    })
+  useRequest('monitor/list', {
+    params: {
+      projectId: route.query.id,
+      current: dataInfo.current,
+      pageSize: dataInfo.pageSize,
+      name: dataInfo.name,
+      startTime: dayjs(dataInfo.date[0]).format('YYYY-MM-DD'),
+      endTime: dayjs(dataInfo.date[1]).format('YYYY-MM-DD')
+    }
+  }).then((res: any) => {
+    dataInfo.total = res.data.value.total
+    dataInfo.list = res.data.value.lists
+    loading.value = false
+  })
 }
 
 const revertBehavior = ({ breadcrumb }: { breadcrumb: any }) => {
@@ -184,16 +185,18 @@ const revertBehavior = ({ breadcrumb }: { breadcrumb: any }) => {
 
 const playRecord = async (recordScreenId: string) => {
   loading.value = true
-  const { error, data } = await useMyFetch('monitor/screen?screenId=' + recordScreenId).get()
+  const { error, data } = await useRequest<{
+    events: string
+  }>('monitor/screen?screenId=' + recordScreenId)
   loading.value = false
   if (error.value) {
     ElMessage.error(error.value)
     return
   }
-  const result = JSON.parse(data.value as string)
+  // const result = data.value
   dialogVisible.value = true
   dialogTitle.value = '播放录屏'
-  let events = unzip(result.events.toString())
+  let events = unzip(data.value!.events.toString())
   nextTick(() => {
     new rrwebPlayer(
       {
@@ -239,16 +242,20 @@ function handleSelectionChange(val: any) {
   selectLen.value = val
 }
 
-function deleteMany() {
+async function deleteMany() {
   loading.value = true
-  useMyFetch(`monitor/delete?ids=${selectLen.value.map((_: any) => _._id)}`)
-    .delete()
-    .then((res: any) => {
-      ElMessage.success('删除成功！')
-      selectLen.value = []
-      loading.value = false
-      getList()
-    })
+  const { error } = await useRequest('monitor/delete', {
+    method: 'delete',
+    params: {
+      ids: selectLen.value.map((_: any) => _._id)
+    }
+  })
+  if (!error.value) {
+    ElMessage.success('删除成功！')
+    selectLen.value = []
+    loading.value = false
+    getList()
+  }
 }
 </script>
 <style lang="scss">

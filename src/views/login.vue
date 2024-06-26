@@ -10,7 +10,7 @@
         <el-form ref="formInstace" :model="user" label-position="left" label-width="120px">
           <el-form-item
             v-if="status === 'register'"
-            prop="nickname"
+            prop="nickName"
             label="昵称"
             :rules="[
               {
@@ -20,25 +20,34 @@
               }
             ]"
           >
-            <el-input v-model="user.nickname" />
+            <el-input v-model="user.nickName" />
           </el-form-item>
           <el-form-item
+            v-if="status === 'register'"
             prop="email"
-            label="邮箱"
+            label="邮件"
             :rules="[
               {
                 required: true,
                 message: 'Please input email address',
                 trigger: 'blur'
-              },
-              {
-                type: 'email',
-                message: 'Please input correct email address',
-                trigger: ['blur', 'change']
               }
             ]"
           >
             <el-input v-model="user.email" />
+          </el-form-item>
+          <el-form-item
+            prop="account"
+            label="账号"
+            :rules="[
+              {
+                required: true,
+                message: 'Please input email address',
+                trigger: 'blur'
+              }
+            ]"
+          >
+            <el-input v-model="user.account" />
           </el-form-item>
           <el-form-item
             prop="password"
@@ -91,14 +100,16 @@
 import { reactive, ref } from 'vue'
 import type { FormInstance } from 'element-plus'
 import { ElMessage } from 'element-plus'
-import { useMyFetch } from '@/utils/http'
+// import { useMyFetch } from '@/utils/http'
+import { useRequest } from '@/utils/request'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 const isFetching = ref(false)
 const user = reactive({
   email: '',
+  account: '',
   password: '',
-  nickname: '',
+  nickName: '',
   password1: ''
 })
 
@@ -110,26 +121,32 @@ async function login() {
     if (valid) {
       if (status.value === 'login') {
         isFetching.value = true
-        const { data } = await useMyFetch('user/login').post({
-          email: user.email,
-          password: user.password
+        const { data, error } = await useRequest<{
+          access_token: string
+          user: Record<string, any>
+        }>('auth/login', {
+          method: 'post',
+          data: {
+            account: user.account,
+            password: user.password
+          }
         })
         isFetching.value = false
-        if (data.value) {
-          localStorage.setItem('token', JSON.parse(data.value as string)?.token)
-          ElMessage.success('登录成功')
-          const result = await useMyFetch('user/info').get().json()
-          localStorage.setItem('userInfo', JSON.stringify(result.data.value))
-          router.push('/')
+        if (!error.value) {
+          localStorage.setItem('token', data.value!.access_token)
+          localStorage.setItem('userInfo', JSON.stringify(data.value!.user))
+          window.location.href = '/'
         }
         // useLocalStorage('token', JSON.parse(data.value as string)?.token)
       } else {
-        const { error } = await useMyFetch('user/register').post({
-          email: user.email,
-          password: user.password,
-          nickname: user.nickname,
-          password1: user.password,
-          password2: user.password1
+        const { error } = await useRequest('auth/register', {
+          method: 'post',
+          data: {
+            account: user.account,
+            password: user.password,
+            nickName: user.nickName,
+            email: user.email
+          }
         })
         console.log('error', error)
         if (!error.value) {

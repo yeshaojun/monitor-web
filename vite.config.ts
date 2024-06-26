@@ -26,9 +26,9 @@ export default defineConfig({
   server: {
     proxy: {
       '/v1': {
-        target: 'https://api.yeshaojun.com',
+        target: 'http://localhost:3000',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/v1/, 'v1')
+        rewrite: (path) => path.replace(/^\/v1/, '')
       }
     }
   }
